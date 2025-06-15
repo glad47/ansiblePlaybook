@@ -6,12 +6,12 @@
     image_name: glad47/my-app
     image_tag: latest
   tasks:
-    - name: Log in to Docker Hub
-      debug:
-        msg: "Login to docker"
-      community.docker.docker_login:
-        username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
-        password: "{{ lookup('env', 'DOCKERHUB_PASSWORD') }}"
+    # - name: Log in to Docker Hub
+    #   debug:
+    #     msg: "Login to docker"
+    #   community.docker.docker_login:
+    #     username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
+    #     password: "{{ lookup('env', 'DOCKERHUB_PASSWORD') }}"
 
     - name: Build Docker image
       debug:
