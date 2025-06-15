@@ -6,26 +6,24 @@
     image_name: glad47/my-app
     image_tag: latest
   tasks:
-    # - name: Log in to Docker Hub
-    #   debug:
-    #     msg: "Login to docker"
-    #   community.docker.docker_login:
-    #     username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
-    #     password: "{{ lookup('env', 'DOCKERHUB_PASSWORD') }}"
-
-    - name: Build Docker image
+    - name: Show debug message before building
       debug:
         msg: "Build Docker image"
+
+    - name: Build Docker image
       community.docker.docker_image:
         name: "{{ image_name }}"
         tag: "{{ image_tag }}"
         build:
-          path: /var/lib/awx/projects/ssh/hello-world-pipeline
+          path: /var/lib/awx/projects/ssh/hello-world-pipeline"
 
-    - name: Push Docker image
+    - name: Show debug message before pushing
       debug:
         msg: "Push Docker image"
+
+    - name: Push Docker image
       community.docker.docker_image:
         name: "{{ image_name }}"
         tag: "{{ image_tag }}"
         push: true
+
