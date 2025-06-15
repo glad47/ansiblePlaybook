@@ -14,6 +14,7 @@
       community.docker.docker_image:
         name: "{{ image_name }}"
         tag: "{{ image_tag }}"
+        source: build
         build:
           path: /var/lib/awx/projects/ssh/hello-world-pipeline"
 
