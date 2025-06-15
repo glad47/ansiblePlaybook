@@ -1,22 +1,25 @@
-name: Build and push Docker image
-hosts: localhost
-gather_facts: true
-vars:
+---
+- name: Build and push Docker image
+  hosts: localhost
+  gather_facts: true
+  vars:
     image_name: glad47/my-app
     image_tag: latest
-tasks:
-  - name: Log in to Docker Hub
-    community.docker.docker_login:
+  tasks:
+    - name: Log in to Docker Hub
+      community.docker.docker_login:
         username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
         password: "{{ lookup('env', 'DOCKERHUB_PASSWORD') }}"
-  - name: Build Docker image
-    community.docker.docker_image:
-        name: '{{ image_name }}'
-        tag: '{{ image_tag }}'
+
+    - name: Build Docker image
+      community.docker.docker_image:
+        name: "{{ image_name }}"
+        tag: "{{ image_tag }}"
         build:
-            path: /var/lib/awx/projects/ssh/hello-world-pipeline
-  - name: Push Docker image
-    community.docker.docker_image:
+          path: /var/lib/awx/projects/ssh/hello-world-pipeline
+
+    - name: Push Docker image
+      community.docker.docker_image:
         name: "{{ image_name }}"
         tag: "{{ image_tag }}"
         push: true
