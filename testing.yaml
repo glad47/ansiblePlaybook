@@ -5,7 +5,7 @@
   tasks:
 
     - name: "📦 Install rootless Docker (skip iptables)"
-      shell: dockerd-rootless-setuptool.sh install --skip-iptables
+      shell: dockerd-rootless-setuptool.sh install --skip-iptables --force
       args:
         executable: /bin/bash
       register: docker_install
