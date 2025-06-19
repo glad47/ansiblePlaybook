@@ -1,0 +1,175 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: '2025-06-17T10:36:36Z'
+  generateName: automation-job-59-
+  generation: 1
+  labels:
+    ansible-awx: 2bda903e-f0c8-4082-800a-f5c9d5e4d5c3
+    ansible-awx-job-id: '59'
+  managedFields:
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:status:
+          f:conditions:
+            k:{"type":"ContainersReady"}:
+              .: {}
+              f:lastProbeTime: {}
+              f:lastTransitionTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+            k:{"type":"Initialized"}:
+              .: {}
+              f:lastProbeTime: {}
+              f:lastTransitionTime: {}
+              f:status: {}
+              f:type: {}
+            k:{"type":"PodReadyToStartContainers"}:
+              .: {}
+              f:lastProbeTime: {}
+              f:lastTransitionTime: {}
+              f:status: {}
+              f:type: {}
+            k:{"type":"Ready"}:
+              .: {}
+              f:lastProbeTime: {}
+              f:lastTransitionTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+          f:containerStatuses: {}
+          f:hostIP: {}
+          f:hostIPs: {}
+          f:startTime: {}
+      manager: kubelet
+      operation: Update
+      subresource: status
+      time: '2025-06-17T10:36:36Z'
+    - apiVersion: v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:generateName: {}
+          f:labels:
+            .: {}
+            f:ansible-awx: {}
+            f:ansible-awx-job-id: {}
+        f:spec:
+          f:automountServiceAccountToken: {}
+          f:containers:
+            k:{"name":"worker"}:
+              .: {}
+              f:args: {}
+              f:image: {}
+              f:imagePullPolicy: {}
+              f:name: {}
+              f:resources:
+                .: {}
+                f:requests:
+                  .: {}
+                  f:cpu: {}
+                  f:memory: {}
+              f:stdin: {}
+              f:stdinOnce: {}
+              f:terminationMessagePath: {}
+              f:terminationMessagePolicy: {}
+          f:dnsPolicy: {}
+          f:enableServiceLinks: {}
+          f:restartPolicy: {}
+          f:schedulerName: {}
+          f:securityContext: {}
+          f:serviceAccount: {}
+          f:serviceAccountName: {}
+          f:terminationGracePeriodSeconds: {}
+      manager: receptor
+      operation: Update
+      time: '2025-06-17T10:36:36Z'
+  name: automation-job-59-zxz4f
+  namespace: awx
+  resourceVersion: '210338'
+  uid: 1d498106-e0ad-4cfe-bcdf-8215b1db8814
+spec:
+  automountServiceAccountToken: false
+  containers:
+    - args:
+        - ansible-runner
+        - worker
+        - '--private-data-dir=/runner'
+      image: docker.io/glad47/custom-xiaohuan-ee:latest
+      imagePullPolicy: IfNotPresent
+      name: worker
+      resources:
+        requests:
+          cpu: 250m
+          memory: 100Mi
+      stdin: true
+      stdinOnce: true
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: controlplane01
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Never
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+status:
+  conditions:
+    - lastProbeTime: null
+      lastTransitionTime: '2025-06-17T10:36:36Z'
+      status: 'False'
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: '2025-06-17T10:36:36Z'
+      status: 'True'
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: '2025-06-17T10:36:36Z'
+      message: 'containers with unready status: [worker]'
+      reason: ContainersNotReady
+      status: 'False'
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: '2025-06-17T10:36:36Z'
+      message: 'containers with unready status: [worker]'
+      reason: ContainersNotReady
+      status: 'False'
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: '2025-06-17T10:36:36Z'
+      status: 'True'
+      type: PodScheduled
+  containerStatuses:
+    - image: docker.io/glad47/custom-xiaohuan-ee:latest
+      imageID: ''
+      lastState: {}
+      name: worker
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        waiting:
+          reason: ContainerCreating
+  hostIP: 192.168.1.32
+  hostIPs:
+    - ip: 192.168.1.32
+  phase: Pending
+  qosClass: Burstable
+  startTime: '2025-06-17T10:36:36Z'

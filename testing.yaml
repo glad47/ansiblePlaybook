@@ -1,0 +1,54 @@
+---
+- name: Test rootless Docker with hello-world
+  hosts: localhost
+  gather_facts: false
+  tasks:
+
+    - name: "📦 Install rootless Docker (skip iptables)"
+      shell: dockerd-rootless-setuptool.sh install --skip-iptables
+      args:
+        executable: /bin/bash
+      register: docker_install
+      ignore_errors: yes
+
+    - debug:
+        msg: "Install output: {{ docker_install.stdout | default('') }}"
+
+    - name: "📁 Set Docker environment variables"
+      shell: |
+        echo 'export DOCKER_HOST=unix:///home/ansible/.docker/run/docker.sock' >> ~/.bashrc
+        echo 'export XDG_RUNTIME_DIR=/home/ansible/.docker/run' >> ~/.bashrc
+        echo 'export PATH=/usr/bin:$PATH' >> ~/.bashrc
+      args:
+        executable: /bin/bash
+
+    - name: "🐧 Start rootless Docker in background"
+      shell: nohup dockerd-rootless.sh --iptables=false > /tmp/docker.log 2>&1 &
+      args:
+        executable: /bin/bash
+
+    - name: "⏱ Wait for Docker socket to appear"
+      shell: |
+        for i in {1..10}; do
+          if [ -S /home/ansible/.docker/run/docker.sock ]; then
+            echo "Docker is ready!"
+            exit 0
+          fi
+          sleep 1
+        done
+        echo "Timed out waiting for Docker" >&2
+        exit 1
+      args:
+        executable: /bin/bash
+
+    - name: "🐳 Run hello-world container"
+      shell: docker run --rm hello-world
+      environment:
+        DOCKER_HOST: unix:///home/ansible/.docker/run/docker.sock
+        XDG_RUNTIME_DIR: /home/ansible/.docker/run
+        PATH: /usr/bin:{{ ansible_env.PATH }}
+      register: hello_output
+
+    - name: "🎉 Show hello-world output"
+      debug:
+        var: hello_output.stdout_lines
