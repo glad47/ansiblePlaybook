@@ -23,23 +23,10 @@
         executable: /bin/bash
 
     - name: "🐧 Start rootless Docker in background"
-      shell: nohup dockerd-rootless.sh --iptables=false > /tmp/docker.log 2>&1 &
+      shell: dockerd-rootless.sh --iptables=false 
       args:
         executable: /bin/bash
 
-    - name: "⏱ Wait for Docker socket to appear"
-      shell: |
-        for i in {1..10}; do
-          if [ -S /home/ansible/.docker/run/docker.sock ]; then
-            echo "Docker is ready!"
-            exit 0
-          fi
-          sleep 1
-        done
-        echo "Timed out waiting for Docker" >&2
-        exit 1
-      args:
-        executable: /bin/bash
 
     - name: "🐳 Run hello-world container"
       shell: docker run --rm hello-world
