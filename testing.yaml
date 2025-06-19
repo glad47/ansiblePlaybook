@@ -22,10 +22,15 @@
       args:
         executable: /bin/bash
 
-    - name: "🐧 Start rootless Docker in background"
-      shell: dockerd-rootless.sh --iptables=false 
+    - name: 🐳 Start rootless Docker with environment set
+      shell: dockerd-rootless.sh --iptables=false
       args:
         executable: /bin/bash
+      environment:
+        XDG_RUNTIME_DIR: /home/ansible/.docker/run
+        DOCKER_HOST: unix:///home/ansible/.docker/run/docker.sock
+        PATH: /usr/bin:{{ ansible_env.PATH }}
+
 
 
     - name: "🐳 Run hello-world container"
