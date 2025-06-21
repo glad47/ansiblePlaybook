@@ -1,0 +1,13 @@
+- name: Test Kubernetes Credential
+  hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: Try to list pods in default namespace
+      kubernetes.core.k8s_info:
+        kind: Pod
+        namespace: default
+      register: result
+
+    - name: Show result
+      debug:
+        var: result.resources

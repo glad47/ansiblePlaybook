@@ -4,22 +4,11 @@
   gather_facts: false
   become: true
   tasks:
+    - name: 📦 List all pods in the 'awx' namespace
+      shell: kubectl get pods -A
+      register: awx_pods
 
-    - name: 📁 Create build directory
-      file:
-        path: /tmp/hello-world-image
-        state: directory
-
-    - name: 📝 Write a basic Dockerfile
-      copy:
-        dest: /tmp/hello-world-image/Dockerfile
-        content: |
-          FROM hello-world
-
-    - name: 🛠️ Build image using Docker
-      shell: sudo podman build -t custom-hello-world /tmp/hello-world-image
-      register: build_output
-
-    - name: 📋 Show build logs
+    - name: 📋 Show AWX pod list
       debug:
-        var: build_output.stdout_lines
+        var: awx_pods.stdout_lines
+   
