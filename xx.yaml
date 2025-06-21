@@ -6,7 +6,7 @@
   tasks:
 
     - name: 🐳 Run hello-world container using Podman
-      shell: sudo podman run --rm hello-world
+      shell: sudo docker run --rm hello-world
       register: hello_output
 
     - name: 🎉 Show hello-world output
