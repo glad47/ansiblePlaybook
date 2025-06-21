@@ -1,0 +1,25 @@
+---
+- name: Test rootful Docker with hello-world
+  hosts: localhost
+  gather_facts: false
+  become: true  # Ensure tasks run as root
+  tasks:
+
+    - name: 🐳 Ensure Docker is installed
+      package:
+        name: docker
+        state: present
+
+    - name: 🐳 Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: 🐳 Run hello-world container
+      shell: docker run --rm hello-world
+      register: hello_output
+
+    - name: 🎉 Show hello-world output
+      debug:
+        var: hello_output.stdout_lines
