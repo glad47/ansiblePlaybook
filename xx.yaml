@@ -17,7 +17,7 @@
           FROM hello-world
 
     - name: 🛠️ Build image using Docker
-      shell: docker build -t custom-hello-world /tmp/hello-world-image
+      shell: sudo podman build -t custom-hello-world /tmp/hello-world-image
       register: build_output
 
     - name: 📋 Show build logs
