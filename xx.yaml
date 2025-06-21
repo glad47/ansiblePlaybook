@@ -1,14 +1,25 @@
 ---
-- name: 🐧 Run hello-world with Podman
+- name: 🐳 Build custom image from hello-world using Docker
   hosts: localhost
   gather_facts: false
   become: true
   tasks:
 
-    - name: 🐳 Run hello-world container using Podman
-      shell: sudo docker run --rm hello-world
-      register: hello_output
+    - name: 📁 Create build directory
+      file:
+        path: /tmp/hello-world-image
+        state: directory
 
-    - name: 🎉 Show hello-world output
+    - name: 📝 Write a basic Dockerfile
+      copy:
+        dest: /tmp/hello-world-image/Dockerfile
+        content: |
+          FROM hello-world
+
+    - name: 🛠️ Build image using Docker
+      shell: docker build -t custom-hello-world /tmp/hello-world-image
+      register: build_output
+
+    - name: 📋 Show build logs
       debug:
-        var: hello_output.stdout_lines
+        var: build_output.stdout_lines
