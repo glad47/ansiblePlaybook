@@ -1,9 +1,7 @@
 ---
-- name: Run hello-world container with Docker (Ansible way)
+- name: Run hello-world container using Docker CLI
   hosts: localhost
   become: true
-  collections:
-    - community.docker
   tasks:
 
     - name: Ensure Docker is installed
@@ -12,13 +10,12 @@
         state: present
 
     - name: Run hello-world container
-      docker_container:
-        name: hello
-        image: hello-world
-        state: started
-        auto_remove: true
-      register: hello_result
+      command: docker run --rm hello-world
+      register: hello_output
+      changed_when: false  # Because docker run --rm always exits cleanly
+      failed_when: hello_output.rc != 0
 
     - name: Show container output
       debug:
-        var: hello_result.container.Output
+        var: hello_output.stdout
+
