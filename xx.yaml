@@ -10,7 +10,7 @@
         state: present
 
     - name: Run hello-world container
-      command: podman run --rm hello-world
+      command: sudo podman run --rm hello-world
       register: hello_output
 
     - name: Show container output
