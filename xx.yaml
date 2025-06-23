@@ -1,21 +1,24 @@
 ---
-- name: Run hello-world container using Podman
+- name: Run hello-world container with Docker (Ansible way)
   hosts: localhost
   become: true
+  collections:
+    - community.docker
   tasks:
 
-    - name: Ensure Podman is installed
+    - name: Ensure Docker is installed
       package:
-        name: podman
+        name: docker
         state: present
 
     - name: Run hello-world container
-      command: sudo podman run --rm hello-world
-      register: hello_output
+      docker_container:
+        name: hello
+        image: hello-world
+        state: started
+        auto_remove: true
+      register: hello_result
 
     - name: Show container output
       debug:
-        var: hello_output.stdout
-
-
-   
+        var: hello_result.container.Output
