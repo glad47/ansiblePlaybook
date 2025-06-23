@@ -1,14 +1,26 @@
 ---
-- name: 🐳 Build custom image from hello-world using Docker
+- name: Run hello-world container with Podman (Ansible way)
   hosts: localhost
-  gather_facts: false
   become: true
+  collections:
+    - containers.podman
   tasks:
-    - name: 📦 List all pods in the 'awx' namespace
-      shell: kubectl get pods -A
-      register: awx_pods
 
-    - name: 📋 Show AWX pod list
+    - name: Ensure Podman is installed
+      package:
+        name: podman
+        state: present
+
+    - name: Run hello-world container
+      podman_container:
+        name: hello
+        image: hello-world
+        state: started
+        rm: true
+      register: hello_result
+
+    - name: Show container output
       debug:
-        var: awx_pods.stdout_lines
+        var: hello_result.stdout
+
    
