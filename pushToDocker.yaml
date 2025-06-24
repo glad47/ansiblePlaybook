@@ -29,3 +29,27 @@
     - name: 📤 Push Docker image to registry
       shell: |
         docker push {{ full_image_name }}
+    - name: 🔍 Get info on simple-web Deployment
+      kubernetes.core.k8s_info:
+        api_version: apps/v1
+        kind: Deployment
+        namespace: default
+        name: simple-web
+      register: deployment_info
+
+    - name: Restart simple-web deployment (patch-style)
+      kubernetes.core.k8s:
+        state: present
+        definition:
+          apiVersion: apps/v1
+          kind: Deployment
+          metadata:
+            name: simple-web
+            namespace: default
+          spec:
+            template:
+              metadata:
+                annotations:
+                  redeploy-ts: "{{ lookup('pipe', 'date +%s') }}"
+
+        
