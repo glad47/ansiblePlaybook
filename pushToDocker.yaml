@@ -1,0 +1,30 @@
+- name: Build and push simple-web Docker image using command line
+  hosts: localhost
+  gather_facts: false
+  vars:
+    image_name: simple-web
+    image_tag: latest
+    docker_namespace: "{{ lookup('env', 'DOCKER_USERNAME') }}"
+    full_image_name: "{{ lookup('env', 'DOCKER_REGISTRY_URL') }}/{{ docker_namespace }}/{{ image_name }}:{{ image_tag }}"
+
+  tasks:
+    - name: 🐳 Build Docker image
+      shell: |
+        docker build -t {{ image_name }}:{{ image_tag }} /opt/projects/hello-world-pipeline
+
+    - name: 🏷️ Tag Docker image for remote registry
+      shell: |
+        docker tag {{ image_name }}:{{ image_tag }} {{ full_image_name }}
+
+    - name: 🔐 Login to Docker registry
+      shell: |
+        echo "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY_URL" -u "$DOCKER_USERNAME" --password-stdin
+      environment:
+        DOCKER_USERNAME: "{{ lookup('env', 'DOCKER_USERNAME') }}"
+        DOCKER_PASSWORD: "{{ lookup('env', 'DOCKER_PASSWORD') }}"
+        DOCKER_REGISTRY_URL: "{{ lookup('env', 'DOCKER_REGISTRY_URL') }}"
+      no_log: true
+
+    - name: 📤 Push Docker image to registry
+      shell: |
+        docker push {{ full_image_name }}
