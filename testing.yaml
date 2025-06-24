@@ -4,43 +4,7 @@
   gather_facts: false
   tasks:
 
-    - name: "📦 Install rootless Docker (skip iptables)"
-      shell: dockerd-rootless-setuptool.sh install --skip-iptables --force
+    - name: "⏸ Simulate container pause for one day"
+      shell: sleep 86400
       args:
         executable: /bin/bash
-      register: docker_install
-      ignore_errors: yes
-
-    - debug:
-        msg: "Install output: {{ docker_install.stdout | default('') }}"
-
-    - name: "📁 Set Docker environment variables"
-      shell: |
-        echo 'export DOCKER_HOST=unix:///home/ansible/.docker/run/docker.sock' >> ~/.bashrc
-        echo 'export XDG_RUNTIME_DIR=/home/ansible/.docker/run' >> ~/.bashrc
-        echo 'export PATH=/usr/bin:$PATH' >> ~/.bashrc
-      args:
-        executable: /bin/bash
-
-    - name: 🐳 Start rootless Docker with environment set
-      shell: dockerd-rootless.sh --iptables=false
-      args:
-        executable: /bin/bash
-      environment:
-        XDG_RUNTIME_DIR: /home/ansible/.docker/run
-        DOCKER_HOST: unix:///home/ansible/.docker/run/docker.sock
-        PATH: /usr/bin:{{ ansible_env.PATH }}
-
-
-
-    - name: "🐳 Run hello-world container"
-      shell: docker run --rm hello-world
-      environment:
-        DOCKER_HOST: unix:///home/ansible/.docker/run/docker.sock
-        XDG_RUNTIME_DIR: /home/ansible/.docker/run
-        PATH: /usr/bin:{{ ansible_env.PATH }}
-      register: hello_output
-
-    - name: "🎉 Show hello-world output"
-      debug:
-        var: hello_output.stdout_lines
