@@ -4,8 +4,9 @@
   vars:
     image_name: simple-web
     image_tag: latest
-    docker_namespace: "{{ lookup('env', 'DOCKER_USERNAME') }}"
-    full_image_name: "{{ lookup('env', 'DOCKER_REGISTRY_URL') }}/{{ docker_namespace }}/{{ image_name }}:{{ image_tag }}"
+    docker_registry: "{{ lookup('env', 'REGISTRY_URL') }}"  # Now clearly named
+    docker_namespace: "{{ lookup('env', 'REGISTRY_USERNAME') }}"
+    full_image_name: "{{ docker_registry }}/{{ docker_namespace }}/{{ image_name }}:{{ image_tag }}"
 
   tasks:
     - name: 🐳 Build Docker image
@@ -18,11 +19,11 @@
 
     - name: 🔐 Login to Docker registry
       shell: |
-        echo "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY_URL" -u "$DOCKER_USERNAME" --password-stdin
+        echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" -u "$REGISTRY_USERNAME" --password-stdin
       environment:
-        DOCKER_USERNAME: "{{ lookup('env', 'DOCKER_USERNAME') }}"
-        DOCKER_PASSWORD: "{{ lookup('env', 'DOCKER_PASSWORD') }}"
-        DOCKER_REGISTRY_URL: "{{ lookup('env', 'DOCKER_REGISTRY_URL') }}"
+        REGISTRY_USERNAME: "{{ lookup('env', 'REGISTRY_USERNAME') }}"
+        REGISTRY_PASSWORD: "{{ lookup('env', 'REGISTRY_PASSWORD') }}"
+        REGISTRY_URL: "{{ docker_registry }}"
       no_log: true
 
     - name: 📤 Push Docker image to registry
